@@ -1,0 +1,88 @@
+services:
+  server:
+    image: my-registry/freeradius-server:latest
+    command:
+      - "--standbymode"
+    ports:
+      - target: 1812
+        published: 1812
+        protocol: udp
+        mode: host
+      - target: 1813
+        published: 1813
+        protocol: udp
+        mode: host
+    volumes:
+      - type: bind
+        source: /etc/localtime
+        target: /etc/localtime
+        read_only: true
+      - type: volume
+        source: config
+        target: /etc/freeradius
+        read_only: true
+      - type: volume
+        source: data
+        target: /var/lib/freeradius
+      - type: volume
+        source: cache
+        target: /var/cache/freeradius
+      - type: volume
+        source: logs
+        target: /var/log/freeradius
+    secrets:
+      - source: healthcheck_secret
+        uid: "1024"
+        gid: "1024"
+        mode: 0400
+    networks:
+      - default_net
+    environment:
+      HEALTHCHECK_SECRET: /run/secrets/healthcheck_secret
+    healthcheck:
+      test: ["CMD", "/healthcheck.sh", "use-status"]
+      start_period: "10s"
+      start_interval: "5s"
+      interval: "30s"
+      timeout: "10s"
+      retries: 3
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname==node-1
+      resources:
+        reservations:
+          cpus: "0.2"
+          memory: "64M"
+        limits:
+          cpus: "2.0"
+          memory: "256M"
+      restart_policy:
+        condition: any
+        delay: "15s"
+        max_attempts: 5
+        window: "10s"
+
+volumes:
+  config:
+    name: freeradius-config
+  data:
+    name: freeradius-data
+  cache:
+    name: freeradius-cache
+  logs:
+    name: freeradius-logs
+
+secrets:
+  healthcheck_secret:
+    name: ""
+    external: true
+
+networks:
+  default_net:
+    name: ""
+    ipam:
+      config:
+        - subnet: "172.18.0.0/27"
