@@ -62,5 +62,5 @@ WORKDIR ${CONFIG_DIR}
 
 EXPOSE 389 636
 
-ENTRYPOINT [ "/entrypoint.sh" ]
+ENTRYPOINT [ "/docker-entrypoint.sh" ]
 CMD [ ]
