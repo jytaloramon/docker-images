@@ -17,7 +17,7 @@ ARG UID="1024"
 ARG GID="1024"
 ARG USER="openldap"
 ARG GROUP="${USER}"
-ARG GECOS="OpenLDAP"
+ARG USER_GECOS="OpenLDAP"
 ARG USER_SHELL="/bin/sh"
 ARG USER_HOME="/nonexistent"
 
@@ -42,7 +42,7 @@ RUN apk add --no-cache openldap \
     && deluser ldap \
     && addgroup -g ${GID} ${GROUP} \
     && adduser -u ${UID} -G ${GROUP} \
-    -H -D -g "${GECOS}" -h ${USER_HOME} \
+    -H -D -g "${USER_GECOS}" -h ${USER_HOME} \
     -s ${USER_SHELL} ${USER} \
     && rm -rf ${CONFIG_DIR}/slapd.ldif \
     ${CONFIG_DIR}/slapd.conf \
