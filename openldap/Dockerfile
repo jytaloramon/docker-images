@@ -6,7 +6,7 @@ ARG IMAGE_VERSION="2.6.15-1"
 
 LABEL org.opencontainers.image.title="OpenLDAP" \
     org.opencontainers.image.version="${IMAGE_VERSION}" \
-    org.opencontainers.image.description="An open source implementation of the Lightweight Directory Access Protocol (LDAP)" \ 
+    org.opencontainers.image.description="An open source implementation of the Lightweight Directory Access Protocol (LDAP)." \ 
     org.opencontainers.image.authors="Ramon Gonçalves" \
     org.opencontainers.image.vendor="Ramon Gonçalves" \
     org.opencontainers.image.url="https://github.com/jytaloramon/docker-images" \
